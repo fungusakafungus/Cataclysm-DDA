@@ -853,6 +853,7 @@ void color_manager::show_gui()
                     ui_templates.addentry( filename.substr( filename.find_last_of( "/" ) + 1 ) );
                 }
 
+                ui_templates.addentry( std::string( _( "Default" ) ) );
                 ui_templates.addentry( std::string( _( "Cancel" ) ) );
                 ui_templates.query();
 
@@ -868,7 +869,13 @@ void color_manager::show_gui()
                     for( const auto &pr : name_map ) {
                         name_color_map[pr.first] = color_array[pr.second];
                     }
-                }
+                } else if( ( size_t )ui_templates.ret == vFiles.size() ) { // Default selected
+		    // Delete file with custom colors
+		    bStuffChanged = remove_file( FILENAMES["custom_colors"] );
+		    clear();
+
+		    load_default();
+		}
             }
 
             finalize(); // Need to recalculate caches
